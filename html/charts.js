@@ -8,6 +8,9 @@ d3.json(dataUrl, function (data) {
     let genderData = data["gender"]
     let myData = Object.keys(genderData).map((key) => { return { "name": key, "y": genderData[key] } })
 
+    let jobs = Object.keys(data["jobs"]).map((key) => { return { "name": key, "data": [data["jobs"][key]] } })
+    console.log(jobs);
+
     let normdata = [
         {
             "name": "GND",
@@ -18,6 +21,7 @@ d3.json(dataUrl, function (data) {
             "y": data["wikidatas"]
         }
     ]
+
     let birthYears = Object.keys(data["birth_year"]).map((key) => {
         return [
             Number(key.padStart(4, '0')), data["birth_year"][key]
@@ -29,7 +33,6 @@ d3.json(dataUrl, function (data) {
             Number(key.padStart(4, '0')), data["death_year"][key]
         ]
     });
-
 
     let bYears = birthYears.filter(isGood)
     let dYears = deathYears.filter(isGood)
@@ -121,5 +124,17 @@ d3.json(dataUrl, function (data) {
             }
         ]
     });
+    
+    // Highcharts.chart('jobs', {
+    //     chart: {
+    //         type: 'bar',
+    //         zoomType: 'y'
+    //     },
+    //     title: {
+    //         text: '',
+    //     },
+    //     series: jobs
+    // });
+    
     
 })

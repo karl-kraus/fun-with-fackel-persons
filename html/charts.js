@@ -1,9 +1,12 @@
 
 const dataUrl = "data.json"
+function isGood(value) {
+    return value[1] > 0
+}
 
 d3.json(dataUrl, function (data) {
     let genderData = data["gender"]
-    let myData = Object.keys(genderData).map((key) => {return { "name": key, "y": genderData[key] }})
+    let myData = Object.keys(genderData).map((key) => { return { "name": key, "y": genderData[key] } })
 
     let normdata = [
         {
@@ -15,8 +18,21 @@ d3.json(dataUrl, function (data) {
             "y": data["wikidatas"]
         }
     ]
+    let birthYears = Object.keys(data["birth_year"]).map((key) => {
+        return [
+            Number(key.padStart(4, '0')), data["birth_year"][key]
+        ]
+    });
 
-    console.log(myData)
+    let deathYears = Object.keys(data["death_year"]).map((key) => {
+        return [
+            Number(key.padStart(4, '0')), data["death_year"][key]
+        ]
+    });
+
+
+    let bYears = birthYears.filter(isGood)
+    let dYears = deathYears.filter(isGood)
 
     Highcharts.chart('gender', {
         chart: {
@@ -25,7 +41,7 @@ d3.json(dataUrl, function (data) {
             plotShadow: false,
             type: 'pie'
         },
-        
+
         tooltip: {
             pointFormat: '{point.y} Personen'
         },
@@ -81,4 +97,29 @@ d3.json(dataUrl, function (data) {
             data: normdata
         }]
     });
+    Highcharts.chart('birthDeathYears', {
+        chart: {
+            zoomType: 'x'
+        },
+        yAxis: {
+            title: {
+                text: 'Personen'
+            },
+            min: 10
+        },
+    
+        colors: ['#6CF', '#39F', '#06C', '#036', '#000'],
+
+        series: [
+            {
+                name: 'Geburtsjahre',
+                data: bYears
+            },
+            {
+                name: 'Todesjahre',
+                data: dYears
+            }
+        ]
+    });
+    
 })

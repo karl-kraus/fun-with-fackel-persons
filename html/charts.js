@@ -25,10 +25,7 @@ d3.json(dataUrl, function (data) {
             plotShadow: false,
             type: 'pie'
         },
-        title: {
-            text: '',
-            align: 'left'
-        },
+        
         tooltip: {
             pointFormat: '{point.y} Personen'
         },
@@ -59,10 +56,6 @@ d3.json(dataUrl, function (data) {
             plotBorderWidth: null,
             plotShadow: false,
             type: 'pie'
-        },
-        title: {
-            text: '',
-            align: 'left'
         },
         tooltip: {
             pointFormat: '{point.y} Personen'

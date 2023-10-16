@@ -4,13 +4,17 @@ from acdh_tei_pyutils.tei import TeiReader
 from acdh_tei_pyutils.utils import get_birth_death_year
 from collections import defaultdict
 
-listperson_url = "https://github.com/semantic-kraus/fa-data/raw/main/data/indices/listperson.xml"
+listperson_url = (
+    "https://github.com/semantic-kraus/fa-data/raw/main/data/indices/listperson.xml"
+)
 listperson_xml = "listperson.xml"
 LIMIT = 20
 try:
     doc = TeiReader(listperson_xml)
 except OSError:
-    print(f"no local version of {listperson_xml} found, fetching data from {listperson_url}")
+    print(
+        f"no local version of {listperson_xml} found, fetching data from {listperson_url}"
+    )
     doc = TeiReader(listperson_url)
     doc.tree_to_file("listperson.xml")
 nsmap = doc.nsmap
@@ -44,7 +48,9 @@ for x in doc.any_xpath(".//tei:person"):
     except IndexError:
         pass
     try:
-        data["wikidatas"].append(x.xpath("./tei:idno[@type='WikiData']", namespaces=nsmap)[0])
+        data["wikidatas"].append(
+            x.xpath("./tei:idno[@type='WikiData']", namespaces=nsmap)[0]
+        )
     except IndexError:
         pass
     for job in x.xpath("./tei:occupation", namespaces=nsmap):

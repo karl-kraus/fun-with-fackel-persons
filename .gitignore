@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 listperson.xml
 data.json
+html/beacon.txt

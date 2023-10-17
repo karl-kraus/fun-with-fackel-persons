@@ -4,12 +4,14 @@ function isGood(value) {
     return value[1] > 0
 }
 
+const limit = 100
+
 d3.json(dataUrl, function (data) {
     let genderData = data["gender"]
     let myData = Object.keys(genderData).map((key) => { return { "name": key, "y": genderData[key] } })
 
-    let jobs = Object.keys(data["jobs"]).map((key) => { return { "name": key, "data": [data["jobs"][key]] } })
-    console.log(jobs);
+    let jobCat = data["jobs"].map((item) => { return item[0]})
+    let jobVal = data["jobs"].map((item) => { return item[1]})
 
     let normdata = [
         {
@@ -36,15 +38,15 @@ d3.json(dataUrl, function (data) {
 
     let bYears = birthYears.filter(isGood)
     let dYears = deathYears.filter(isGood)
+    console.log(bYears)
 
     Highcharts.chart('gender', {
         chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
             type: 'pie'
         },
-
+        title: {
+            text: ""
+        },
         tooltip: {
             pointFormat: '{point.y} Personen'
         },
@@ -71,10 +73,10 @@ d3.json(dataUrl, function (data) {
     });
     Highcharts.chart('normdata', {
         chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false,
             type: 'pie'
+        },
+        title: {
+            text: ""
         },
         tooltip: {
             pointFormat: '{point.y} Personen'
@@ -104,6 +106,9 @@ d3.json(dataUrl, function (data) {
         chart: {
             zoomType: 'x'
         },
+        title: {
+            text: ""
+        },
         yAxis: {
             title: {
                 text: 'Personen'
@@ -125,16 +130,28 @@ d3.json(dataUrl, function (data) {
         ]
     });
     
-    // Highcharts.chart('jobs', {
-    //     chart: {
-    //         type: 'bar',
-    //         zoomType: 'y'
-    //     },
-    //     title: {
-    //         text: '',
-    //     },
-    //     series: jobs
-    // });
+    Highcharts.chart('jobs', {
+        chart: {
+            type: 'bar',
+            zoomType: 'x',
+            height: 800
+        },
+        title: {
+            text: '',
+        },
+        xAxis: {
+            categories: jobCat.slice(0, limit)
+        },
+        legend: {
+            enabled: false
+        },
+        series: [
+            {
+                name: "Berufe",
+                data: jobVal.slice(0, limit)
+            }
+        ]
+    });
     
     
 })

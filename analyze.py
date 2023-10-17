@@ -73,9 +73,14 @@ for key, value in data.items():
     elif key in ["gender"]:
         new_data[key] = value
     else:
-        new_data[key] = {}
+        tmp = {}
         for x, y in dict(value).items():
-            new_data[key][x] = len(y)
+            tmp[x] = len(y)
+        if "year" not in key:
+            new_data[key] = sorted(tmp.items(), key=lambda x: x[1], reverse=True)
+        else:
+            new_data[key] = tmp
+
 
 with open("./html/data.json", "w", encoding="utf-8") as fp:
     json.dump(new_data, fp, ensure_ascii=False, indent=4)

@@ -31,10 +31,13 @@ data = {
     "birth_year": defaultdict(list),
     "died_in": defaultdict(list),
     "death_year": defaultdict(list),
+    "moving": defaultdict(int),
 }
 for x in doc.any_xpath(".//tei:person"):
     fa_id = x.attrib["{http://www.w3.org/XML/1998/namespace}id"]
     data["mentions"][len(x.xpath(".//tei:ptr", namespaces=nsmap))].append(fa_id)
+    place_names = x.xpath(".//tei:placeName/text()", namespaces=nsmap)
+    data["moving"]["___".join(place_names)] += 1
     try:
         sex = x.xpath("./tei:sex/text()", namespaces=nsmap)[0]
         if sex == "male":
@@ -72,6 +75,17 @@ for key, value in data.items():
         new_data[key] = len(value)
     elif key in ["gender"]:
         new_data[key] = value
+    elif key in ["moving"]:
+        tmp = []
+        for x, y in dict(value).items():
+            try:
+                source, target = x.split("___")
+            except:
+                continue
+            if source != target and y > 5:
+                tmp.append([source, target, y])
+        new_data[key] = tmp
+
     else:
         tmp = {}
         for x, y in dict(value).items():

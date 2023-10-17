@@ -9,6 +9,8 @@ const limit = 100
 d3.json(dataUrl, function (data) {
     let genderData = data["gender"]
     let myData = Object.keys(genderData).map((key) => { return { "name": key, "y": genderData[key] } })
+    let movingData = data["moving"]
+    console.log(movingData)
 
     let jobCat = data["jobs"].map((item) => { return item[0]})
     let jobVal = data["jobs"].map((item) => { return item[1]})
@@ -38,7 +40,6 @@ d3.json(dataUrl, function (data) {
 
     let bYears = birthYears.filter(isGood)
     let dYears = deathYears.filter(isGood)
-    console.log(bYears)
 
     Highcharts.chart('gender', {
         chart: {
@@ -134,7 +135,7 @@ d3.json(dataUrl, function (data) {
         chart: {
             type: 'bar',
             zoomType: 'x',
-            height: 800
+            height: 1200
         },
         title: {
             text: '',
@@ -153,5 +154,36 @@ d3.json(dataUrl, function (data) {
         ]
     });
     
+    Highcharts.chart('birthDeathPlaces', {
+
+        title: {
+            text: ''
+        },
+    
+        accessibility: {
+            point: {
+                valueDescriptionFormat: '{index}. From {point.from} to {point.to}: {point.weight}.'
+            }
+        },
+    
+        series: [{
+            keys: ['from', 'to', 'weight'],
+            data: movingData,
+            type: 'dependencywheel',
+            name: 'Bewegungen',
+            dataLabels: {
+                color: '#333',
+                style: {
+                    textOutline: 'none'
+                },
+                textPath: {
+                    enabled: true
+                },
+                distance: 10
+            },
+            size: '100%'
+        }]
+    
+    });
     
 })
